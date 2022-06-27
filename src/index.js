@@ -2,6 +2,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import converter from './../src/kelvinsToFahrenheit.js';
 
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
@@ -16,14 +17,15 @@ $(document).ready(function() {
         const response = JSON.parse(this.responseText);
         getElements(response);
       }
-    }
+    };
 
     request.open("GET", url, true);
     request.send();
 
     function getElements(response) {
       $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
+      $('.showTemp').text(`The temperature in Fahrenheit is ${converter(response.main.temp)} degrees.`);
+      $('.showWind').text(`The wind speed is ${response.wind.speed} m/s.`);
     }
   });
 });
