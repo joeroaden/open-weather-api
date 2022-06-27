@@ -2,7 +2,8 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-import converter from './../src/kelvinsToFahrenheit.js';
+import { converter } from './../src/kelvinsToFahrenheit.js';
+import { checkNumber } from './../src/kelvinsToFahrenheit.js';
 
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
@@ -34,6 +35,21 @@ $(document).ready(function() {
   $('#weatherLocationZip').click(function(){
     const zip = $('#zip').val();
     $('#zip').val("");
+
+    try {
+      const isNumberValid = checkNumber(zip);
+      if (isNumberValid instanceof Error) {
+        console.error(isNumberValid.message);
+        throw RangeError("Not a valid number!");
+      } else {
+        console.log("Try was successful, so no need to catch!");
+        $('#displayNumber').text("This number is valid. You may continue.");
+      }
+    } catch(error) {
+      alert(`Red alert! We have an error: ${error.message}`);
+    }
+
+
     let request1 = new XMLHttpRequest();
     const url2 = `http://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${process.env.API_KEY}`;
 
